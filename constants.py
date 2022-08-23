@@ -1,8 +1,8 @@
 """
-The following are constants used in training the model.
-Kindly find a description of each as well as the default.
-
+Add hyperparams here pls
 """
+
+LOCAL = True
 
 # How many times should the model pass through the training set?
 EPOCHS = 100
@@ -15,3 +15,9 @@ N_EVAL = 25
 
 # Where is the <> dir?
 DATA_DIR = ""
+
+# Hyperparameters for SequencesCountVectorizer
+MAX_SEQ_LEN = 25
+MIN_FREQ = 0.00
+MAX_FREQ = 0.98
+

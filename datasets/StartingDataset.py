@@ -54,11 +54,10 @@ class StartingDataset(torch.utils.data.Dataset):
         #embedding = self.bag_of_words(comment)
         embedding = self.get_glove_embeddings(comment)
 
-        print(f"(__getitem__) >   GLOVE: {embedding}")  
+        print(f"(__getitem__) >   GLOVE: {embedding}")
 
         return comment, label, embedding
-    
-    
+
     def gen_glove_embedding_dict(self): 
 
         f = open(self.glove_embeddings_path, "r", encoding="utf-8")
