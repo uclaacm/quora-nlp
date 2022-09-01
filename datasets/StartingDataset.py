@@ -20,9 +20,9 @@ class StartingDataset(torch.utils.data.Dataset):
         self.qs = np.asarray(self.df['question_text'].values)
         self.ls = np.asarray(self.df['target'].values, dtype='int')
 
-        print(f"Number of loaded comments : {self.len}")
-        print(f"Number of sincere Q (0)   : {np.count_nonzero(self.ls == 0)}")
-        print(f"Number of insincere Qs (1): {np.count_nonzero(self.ls == 1)}")
+        # print(f"Number of loaded comments : {self.len}")
+        # print(f"Number of sincere Q (0)   : {np.count_nonzero(self.ls == 0)}")
+        # print(f"Number of insincere Qs (1): {np.count_nonzero(self.ls == 1)}")
 
 
         # For Bag of Words Approach 
@@ -48,13 +48,13 @@ class StartingDataset(torch.utils.data.Dataset):
         comment = self.qs[index]
         label = self.ls[index]
 
-        print(f"(__getitem__) > Comment: {comment}")
-        print(f"(__getitem__) >   Label: {label}")
+        # print(f"(__getitem__) > Comment: {comment}")
+        # print(f"(__getitem__) >   Label: {label}")
 
         #embedding = self.bag_of_words(comment)
         embedding = self.get_glove_embeddings(comment)
 
-        print(f"(__getitem__) >   GLOVE: {embedding}")
+        # print(f"(__getitem__) >   GLOVE: {embedding}")
 
         return comment, label, embedding
 
