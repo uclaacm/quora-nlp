@@ -1,3 +1,5 @@
+import torch
+from tqdm import tqdm, tqdm_notebook
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
@@ -18,7 +20,7 @@ def get_correct(outputs, labels):
     
     return np.array([n_correct_sincere, n_sincere, n_correct_insincere, n_insincere])
 
-def test_loop(model, test_loader, device):
+def test_loop(model, test_loader, device, loss_criterion):
     model.eval()
     with torch.no_grad():
         progress_bar = tqdm_notebook(test_loader, leave=False)
@@ -51,6 +53,7 @@ def test_loop(model, test_loader, device):
         test_loss = sum(losses) / total
         
         tqdm.write(f'AUC Score: {roc_auc_score(target_cumulative, prediction_cumulative)}')
-        tqdm.write(f'{stats[0]} / {stats[1]}, {stats[2]} / {stats[3]}')
-        tqdm.write(f'Test Loss: {test_loss:.3f} \t Sincere Accuracy: {sincere_accuracy:.3f} \t Insincere Accuracy: {insincere_accuracy:.3f}')
+        tqdm.write(f'''Test Loss: {test_loss:.3f} \n
+                    Sincere Accuracy: {stats[0]} / {stats[1]} ({sincere_accuracy:.3f}%) \n
+                    Insincere Accuracy: {stats[2]} / {stats[3]} ({insincere_accuracy:.3f}%)''')
         

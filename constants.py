@@ -5,7 +5,8 @@ Add hyperparams here pls
 LOCAL = True
 
 # How many times should the model pass through the training set?
-EPOCHS = 100
+EPOCHS = 5
+# EPOCHS = 100
 
 # How many comments to use in one training iteration?
 BATCH_SIZE = 30

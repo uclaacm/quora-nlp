@@ -28,7 +28,6 @@ class SequencesCountVectorizer(Dataset):
         if retention_ratio < 1 and is_train:
           df = (df).drop((df).query('target < 1').sample(frac=(1-retention_ratio)).index)
 
-        print(len(df))
         train, test = train_test_split(df, test_size=0.2)
         df = train if is_train else test
         # create a vectorizer object
@@ -43,9 +42,9 @@ class SequencesCountVectorizer(Dataset):
         
         # save a dictionary of our corpus vocabulary
         self.token2idx = vectorizer.vocabulary_
-        print(self.token2idx)
+        # print(self.token2idx)
         self.token2idx['<PAD>'] = max(self.token2idx.values()) + 1 #what is this? whitespace?
-        print(self.token2idx['<PAD>'])
+        # print(self.token2idx['<PAD>'])
 
         # create a tokenizer object to 
         tokenizer = vectorizer.build_analyzer()

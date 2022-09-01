@@ -1,3 +1,5 @@
+import torch
+from torch import nn
 from tqdm import tqdm, tqdm_notebook # log writer
 import sys
 # setting path
@@ -15,7 +17,7 @@ def binary_accuracy(preds, y):
     acc = correct.sum() / len(correct)
     return acc
 
-def train(model, train_loader, optimizer, criterion, device):
+def train(model, train_loader, optimizer, loss_criterion, device):
   model.train() # switch model to train mode
   train_losses = []
 
@@ -36,15 +38,16 @@ def train(model, train_loader, optimizer, criterion, device):
           
           output = model(inputs)
       
-          loss = loss_criterion(output, target)
-          acc = binary_accuracy(output, target)
+          loss = loss_criterion(output.squeeze(), target)
+          acc = binary_accuracy(output.squeeze(), target)
           
           loss.backward()
           nn.utils.clip_grad_norm_(model.parameters(), 3) # gradient clipping
           optimizer.step()
           
           progress_bar.set_description(f'Loss: {loss.item():.3f}')
-          
+          #TODO: add validation to the training loop
+
           loss_val = loss.item()
         
           losses.append(loss.item())

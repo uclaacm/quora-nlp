@@ -41,7 +41,7 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # choose your model, loss function and optimizer
-    model = StartingNetwork(vocab_size=len(train_dataset.token2idx), hidden1=128, hidden2=64)
+    model = StartingNetwork(hidden1=128, hidden2=64)
     loss_criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
@@ -51,7 +51,7 @@ def main():
 
     # testing loop
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, collate_fn=collate)
-    test_loop(model, test_loader, device)
+    test_loop(model, test_loader, device, loss_criterion)
 
 
 # this crap seems incompatible with the constants file we had
