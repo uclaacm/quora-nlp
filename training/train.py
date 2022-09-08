@@ -34,7 +34,7 @@ def train(model, train_loader, optimizer, loss_criterion, device):
         accs = []
         total = 0
 
-        for inputs, target in progress_bar:
+        for inputs, target in progress_bar: #for BERT there's also an attention mask
 
             inputs, target = inputs.to(device), target.to(device)
 
