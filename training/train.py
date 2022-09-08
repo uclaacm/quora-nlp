@@ -18,12 +18,13 @@ def binary_accuracy(preds, y):
     return acc
 
 def train(model, train_loader, optimizer, loss_criterion, device):
+  model.to(device)
   model.train() # switch model to train mode
   train_losses = []
 
   for epoch in range(EPOCHS):
       
-      progress_bar = tqdm_notebook(train_loader, leave=False)
+      progress_bar = tqdm(train_loader, leave=False)
       
       losses = []
       accs = []
@@ -32,7 +33,11 @@ def train(model, train_loader, optimizer, loss_criterion, device):
       for inputs, target in progress_bar:
           
           inputs, target = inputs.to(device), target.to(device)
-
+        
+        #   print(inputs.size())
+        #   print(target.size())
+        #   quit()
+          
           optimizer.zero_grad()
           model.zero_grad()
           

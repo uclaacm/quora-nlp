@@ -22,6 +22,7 @@ from torch.utils.data import DataLoader
 from datasets.StartingDataset import StartingDataset 
 from datasets.SequencesCountVectorizor import SequencesCountVectorizer
 from networks.StartingNetwork import StartingNetwork
+from networks.RNN import RNN, RNN2
 from training.train import train
 from training.test import test_loop
 from constants import *
@@ -31,17 +32,28 @@ def main():
     args = parse_arguments()
 
     # Init dataset
-    data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
+    # data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
+    data_path = r'C:\Users\email\OneDrive\Documents\Python\quora-nlp\data\\'
     train_path = data_path + "train.csv"
     test_path = data_path + "test.csv" #this shit isn't labelled
+    print("Generating encodings...")
     train_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO)
     test_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO, is_train=False)
+
+    # print(train_dataset[5])
+    # all_ids = []
+    # for i in range(len(train_dataset)):
+    #     all_ids += train_dataset[i][0]
+    # vocab_size = max(all_ids)
+    # print("Vocabulary size: " + str(vocab_size))
 
     # enables GPU support
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # choose your model, loss function and optimizer
-    model = StartingNetwork(hidden1=128, hidden2=64)
+    # model = StartingNetwork(hidden1=128, hidden2=64)
+    model = RNN(vocab_size = len(train_dataset), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
+    # model = RNN2(vocab_size = len(train_dataset.token2idx), batch_size = BATCH_SIZE, embedding_dimension = 100, device = device)
     loss_criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
