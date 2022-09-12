@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd 
 
 class SequencesCountVectorizer(Dataset):
-    def __init__(self, path, max_seq_len, min_freq, max_freq, class_ratio=1, is_train=True):
+    def __init__(self, path, args, is_train=True):
         """
         path - the path of the training csv file
         max_seq_len - the maximum question length we want to consider (H) TODO: what does this H mean
@@ -12,7 +12,7 @@ class SequencesCountVectorizer(Dataset):
         class_ratio - the L + ratio of the 0 label to 1 label in training data
         """
 
-        self.max_seq_len = max_seq_len
+        self.max_seq_len = args.max_seq_len
         df = pd.read_csv(path)
         df = df.dropna() # remove any rows with erroneous variable types
        
@@ -23,17 +23,17 @@ class SequencesCountVectorizer(Dataset):
         cur_ratio = num_zero/num_one
     
         # fraction of current 0s we want to retain
-        retention_ratio = class_ratio / cur_ratio
+        retention_ratio = args.class_ratio / cur_ratio
 
         if retention_ratio < 1 and is_train:
           df = (df).drop((df).query('target < 1').sample(frac=(1-retention_ratio)).index)
 
-        train, test = train_test_split(df, test_size=0.2)
+        train, test = train_test_split(df, test_size=args.split_percent/100)
         df = train if is_train else test
         # create a vectorizer object
         # only keep words with >15% frequency this is a hyper-param
-        vectorizer = CountVectorizer(stop_words='english', min_df=min_freq, 
-                                     max_df=max_freq) 
+        vectorizer = CountVectorizer(stop_words='english', min_df=args.min_freq, 
+                                     max_df=args.max_freq) 
 
         questions_list = df.question_text.tolist()
 
@@ -56,11 +56,11 @@ class SequencesCountVectorizer(Dataset):
         
         # this is a padder helper function that helps pad all sequences to a 
         # uniform length
-        self.pad = lambda x: x + (max_seq_len - len(x)) * [self.token2idx['<PAD>']]
+        self.pad = lambda x: x + (args.max_seq_len - len(x)) * [self.token2idx['<PAD>']]
         
         # encode every question in the dataframe and save the encoding in 
         # sequences
-        sequences = [self.encode(sequence)[:max_seq_len] 
+        sequences = [self.encode(sequence)[:args.max_seq_len] 
                      for sequence in df.question_text.tolist()]
 
         # converting the sequence and label columns into iterables

@@ -34,8 +34,9 @@ def main():
     data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
     train_path = data_path + "train.csv"
     test_path = data_path + "test.csv" #this shit isn't labelled
-    train_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO)
-    test_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO, is_train=False)
+
+    train_dataset = SequencesCountVectorizer(train_path, args)
+    test_dataset = SequencesCountVectorizer(train_path, args, is_train=False)
 
     # enables GPU support
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -46,11 +47,11 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     # training loop
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, collate_fn=collate)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=collate)
     train(model, train_loader, optimizer, loss_criterion, device)
 
     # testing loop
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, collate_fn=collate)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=collate)
     test_loop(model, test_loader, device, loss_criterion)
 
 
@@ -77,6 +78,13 @@ def parse_arguments():
     parser.add_argument("--batch_size", type=int, default=BATCH_SIZE)
     parser.add_argument("--n_eval", type=int, default=N_EVAL)
     parser.add_argument("--datadir", type=str, default=DATA_DIR)
+
+    parser.add_argument("--max_seq_len", type=int, default=MAX_SEQ_LEN)
+    parser.add_argument("--min_freq", type=float, default=MIN_FREQ)
+    parser.add_argument("--max_freq", type=float, default=MAX_FREQ)
+
+    parser.add_argument("--class_ratio", type=int, default=CLASS_RATIO)
+    parser.add_argument("--split_percent", type=int, default=SPLIT_PERC)
 
     return parser.parse_args()
 

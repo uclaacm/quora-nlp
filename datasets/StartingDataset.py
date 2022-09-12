@@ -14,7 +14,7 @@ class StartingDataset(torch.utils.data.Dataset):
 
     def __init__(self, csv_path, glove_path):
 
-        self.df = pd.read_csv(path)
+        self.df = pd.read_csv(csv_path)
         self.len = len(self.df)
 
         self.qs = np.asarray(self.df['question_text'].values)

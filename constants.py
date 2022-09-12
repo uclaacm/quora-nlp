@@ -14,6 +14,9 @@ BATCH_SIZE = 30
 # How often should we evaluate the model (in iterations)?
 N_EVAL = 25
 
+# What percent of data to use for test?
+SPLIT_PERC = 20 
+
 # How much should the gradient descent move?
 LEARNING_RATE = 5e-3
 CLASS_RATIO = 2
