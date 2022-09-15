@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 from datasets.StartingDataset import StartingDataset 
 from datasets.SequencesCountVectorizor import SequencesCountVectorizer
 from networks.StartingNetwork import StartingNetwork
-from networks.RNN import RNN, RNN2
+from networks.RNN import RNN
 from training.train import train
 from training.test import test_loop
 from constants import *
@@ -40,28 +40,24 @@ def main():
     train_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO)
     test_dataset = SequencesCountVectorizer(train_path, max_seq_len=MAX_SEQ_LEN, min_freq=MIN_FREQ, max_freq=MAX_FREQ, class_ratio=CLASS_RATIO, is_train=False)
 
-    # print(train_dataset[5])
-    # all_ids = []
-    # for i in range(len(train_dataset)):
-    #     all_ids += train_dataset[i][0]
-    # vocab_size = max(all_ids)
-    # print("Vocabulary size: " + str(vocab_size))
-
     # enables GPU support
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # choose your model, loss function and optimizer
     # model = StartingNetwork(hidden1=128, hidden2=64)
-    model = RNN(vocab_size = len(train_dataset), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
-    # model = RNN2(vocab_size = len(train_dataset.token2idx), batch_size = BATCH_SIZE, embedding_dimension = 100, device = device)
-    loss_criterion = nn.BCEWithLogitsLoss()
+    model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
+    # this loss includes a sigmoid layer
+    # loss_criterion = nn.BCEWithLogitsLoss()
+    loss_criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     # training loop
+    print("Training:")
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, collate_fn=collate)
     train(model, train_loader, optimizer, loss_criterion, device)
 
     # testing loop
+    print("Testing:")
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, collate_fn=collate)
     test_loop(model, test_loader, device, loss_criterion)
 

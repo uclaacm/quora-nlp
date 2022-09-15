@@ -11,8 +11,8 @@ def get_correct(outputs, labels):
     n_correct_insincere = 0
     
     for o, l in zip(outputs, labels):
-        # print(round(torch.sigmoid(o).item()), l.item())
-        if ((round(torch.sigmoid(o).item())) == l.item()):
+        #if ((round(torch.sigmoid(o).item())) == l.item()):
+        if (torch.round(o) == l.item()):
             if l.item() == 0:
                 n_correct_sincere += 1
             else:
@@ -23,7 +23,7 @@ def get_correct(outputs, labels):
 def test_loop(model, test_loader, device, loss_criterion):
     model.eval()
     with torch.no_grad():
-        progress_bar = tqdm_notebook(test_loader, leave=False)
+        progress_bar = tqdm(test_loader, leave=False)
         losses = []
         stats = np.array([0,0,0,0])
         
@@ -56,4 +56,6 @@ def test_loop(model, test_loader, device, loss_criterion):
         tqdm.write(f'''Test Loss: {test_loss:.3f} \n
                     Sincere Accuracy: {stats[0]} / {stats[1]} ({sincere_accuracy:.3f}%) \n
                     Insincere Accuracy: {stats[2]} / {stats[3]} ({insincere_accuracy:.3f}%)''')
-        
+
+# if __name__== "__main__":
+
