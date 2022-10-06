@@ -15,24 +15,23 @@ def binary_accuracy(preds, y):
     """
 
     # round predictions to the closest integer
-    rounded_preds = torch.round(torch.sigmoid(preds))
-    correct = (rounded_preds == y).float()  # convert into float for division
+    correct = (torch.round(preds) == y).float() #convert into float for division 
     acc = correct.sum() / len(correct)
     return acc
 
 
 def train(model, train_loader, optimizer, loss_criterion, device):
-    model.train()  # switch model to train mode
-    train_losses = []
-    tb_writer = SummaryWriter()
+  model.to(device)
+  model.train() # switch model to train mode
+  train_losses = []
 
-    for epoch in range(EPOCHS):
-
-        progress_bar = tqdm_notebook(train_loader, leave=False)
-
-        losses = []
-        accs = []
-        total = 0
+  for epoch in range(EPOCHS):
+      
+      progress_bar = tqdm(train_loader, leave=False)
+      
+      losses = []
+      accs = []
+      total = 0
 
         for inputs, target in progress_bar:
 
