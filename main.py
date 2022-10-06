@@ -32,8 +32,7 @@ def main():
     args = parse_arguments()
 
     # Init dataset
-    # data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
-    data_path = r'C:\Users\email\OneDrive\Documents\Python\quora-nlp\data\\'
+    data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
     train_path = data_path + "train.csv"
     test_path = data_path + "test.csv" #this shit isn't labelled
     print("Generating encodings...")
