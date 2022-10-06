@@ -21,17 +21,17 @@ def binary_accuracy(preds, y):
 
 
 def train(model, train_loader, optimizer, loss_criterion, device):
-  model.to(device)
-  model.train() # switch model to train mode
-  train_losses = []
+    model.to(device)
+    model.train() # switch model to train mode
+    train_losses = []
 
-  for epoch in range(EPOCHS):
-      
-      progress_bar = tqdm(train_loader, leave=False)
-      
-      losses = []
-      accs = []
-      total = 0
+    for epoch in range(EPOCHS):
+        
+        progress_bar = tqdm(train_loader, leave=False)
+        
+        losses = []
+        accs = []
+        total = 0
 
         for inputs, target in progress_bar:
 
@@ -63,12 +63,12 @@ def train(model, train_loader, optimizer, loss_criterion, device):
                 tb_writer.add_scalar("Accuracy (Train)", acc, total)
                 tb_writer.add_scalar("Loss (Train)", loss.item(), total)
 
-        epoch_loss = sum(losses) / total
-        accuracy = sum(accs) / total
-        train_losses.append(epoch_loss)
+    epoch_loss = sum(losses) / total
+    accuracy = sum(accs) / total
+    train_losses.append(epoch_loss)
 
-        tqdm.write(
-            f'Epoch #{epoch + 1}\tTrain Loss: {epoch_loss:.3f}\tAccuracy: {accuracy:.3f}')
+    tqdm.write(
+        f'Epoch #{epoch + 1}\tTrain Loss: {epoch_loss:.3f}\tAccuracy: {accuracy:.3f}')
 
     tb_writer.flush()
     tb_writer.close()
