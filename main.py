@@ -48,16 +48,10 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # choose your model, loss function and optimizer
-<<<<<<< Updated upstream
     # model = StartingNetwork(hidden1=128, hidden2=64)
     # model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
     model = BERTNetwork()
     loss_criterion = nn.BCELoss()
-=======
-    vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1) # vocab size is the largest token number + 1
-    model = RNN(vocab_size= vocab_size, batch_size= BATCH_SIZE, device= device)
-    loss_criterion = nn.BCEWithLogitsLoss()
->>>>>>> Stashed changes
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     # training loop
