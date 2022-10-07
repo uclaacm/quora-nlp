@@ -5,15 +5,11 @@ Add hyperparams here pls
 LOCAL = True
 
 # How many times should the model pass through the training set?
-<<<<<<< Updated upstream
-EPOCHS = 3
-=======
 EPOCHS = 2
->>>>>>> Stashed changes
 # EPOCHS = 100
 
 # How many comments to use in one training iteration?
-BATCH_SIZE = 6400
+BATCH_SIZE = 64
 
 # How often should we evaluate the model (in iterations)?
 N_EVAL = 25

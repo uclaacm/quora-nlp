@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 import pandas as pd 
 
-class SequencesCountVectorizer(Dataset):
+class TokenDataset(Dataset):
     def __init__(self, path, args, is_train=True):
         """
         path - the path of the training csv file

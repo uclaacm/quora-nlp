@@ -20,7 +20,8 @@ from torch.utils.data import DataLoader
 # TODO: Change these inports to only import models/dataset as specified by args 
 
 from datasets.StartingDataset import StartingDataset 
-from datasets.SequencesCountVectorizor import SequencesCountVectorizer
+from datasets.TokenDataset import TokenDataset
+from datasets.BERTDataset import BERTDataset
 
 # IMPORT NETWORKS
 from networks.StartingNetwork import StartingNetwork
@@ -41,8 +42,8 @@ def main():
     train_path = r'C:\Users\email\OneDrive\Documents\Python\quora-nlp\data\train.csv'
     test_path = data_path + "test.csv" #this shit isn't labelled
 
-    train_dataset = SequencesCountVectorizer(train_path, args)
-    test_dataset = SequencesCountVectorizer(train_path, args, is_train=False)
+    train_dataset = BERTDataset(train_path, args)
+    test_dataset = BERTDataset(train_path, args, is_train=False)
 
     # enables GPU support
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -55,11 +56,11 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     # training loop
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, collate_fn=collate)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
     train(model, train_loader, optimizer, loss_criterion, device)
 
     # testing loop
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, collate_fn=collate)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size)
     test_loop(model, test_loader, device, loss_criterion)
 
 

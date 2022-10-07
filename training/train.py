@@ -26,22 +26,16 @@ def train(model, train_loader, optimizer, loss_criterion, device):
     train_losses = []
 
     for epoch in range(EPOCHS):
-<<<<<<< Updated upstream
-        
-        progress_bar = tqdm(train_loader, leave=False)
-        
-=======
 
         progress_bar = tqdm(train_loader, leave=False)
 
->>>>>>> Stashed changes
         losses = []
         accs = []
         total = 0
 
         for inputs, target in progress_bar:
-
-            inputs, target = inputs.to(device), target.to(device)
+            inputs = inputs.to(device)
+            target = target.to(device)
 
             optimizer.zero_grad()
             model.zero_grad()
