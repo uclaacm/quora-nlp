@@ -21,8 +21,12 @@ from torch.utils.data import DataLoader
 
 from datasets.StartingDataset import StartingDataset 
 from datasets.SequencesCountVectorizor import SequencesCountVectorizer
+
+# IMPORT NETWORKS
 from networks.StartingNetwork import StartingNetwork
 from networks.RNN import RNN
+from networks.BERTNetwork import BERTNetwork
+
 from training.train import train
 from training.test import test_loop
 from constants import *
@@ -44,9 +48,8 @@ def main():
 
     # choose your model, loss function and optimizer
     # model = StartingNetwork(hidden1=128, hidden2=64)
-    model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
-    # this loss includes a sigmoid layer
-    # loss_criterion = nn.BCEWithLogitsLoss()
+    # model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
+    model = BERTNetwork()
     loss_criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
