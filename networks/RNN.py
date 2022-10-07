@@ -17,6 +17,12 @@ class RNN(nn.Module):
         self.hidden_size = hidden_size
         self.device = device
         self.batch_size = batch_size
+
+        """
+        nn.Embedding is optimized as part of your training task. Consequently, after training, you can expect to have embeddings that are specific to your task rather than generic embeddings that generate a more general representation which can be more or less useful depending on your task. To illustrate, you can imagine having a screwdriver that works on some screws but if your screw is very specific, then you will need to change your tool for your specific task.
+        Using pretrained vectors is generally a good starting point but you should consider retraining/fine-tuning the vectors for your specific task
+        Difference between Embedding and Linear: Linear expects vectors (e.g. one-hot representation of the words), Embedding expects tokens (e.g. words index)
+        """
         
         self.encoder = nn.Embedding(vocab_size, embedding_dimension)
         self.rnn = nn.GRU(
