@@ -1,7 +1,7 @@
 from constants import *
 import torch
 from torch import nn
-from tqdm import tqdm, tqdm_notebook  # log writer
+from tqdm import tqdm # log writer
 import sys
 from torch.utils.tensorboard import SummaryWriter
 
@@ -26,9 +26,15 @@ def train(model, train_loader, optimizer, loss_criterion, device):
     train_losses = []
 
     for epoch in range(EPOCHS):
+<<<<<<< Updated upstream
         
         progress_bar = tqdm(train_loader, leave=False)
         
+=======
+
+        progress_bar = tqdm(train_loader, leave=False)
+
+>>>>>>> Stashed changes
         losses = []
         accs = []
         total = 0

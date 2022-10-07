@@ -25,16 +25,25 @@ class RNN(nn.Module):
             num_layers=n_layers,
             batch_first=True,
         )
+<<<<<<< Updated upstream
         # self.decoder = nn.Linear(hidden_size, 2)
+=======
+        
+>>>>>>> Stashed changes
         self.decoder = nn.Linear(hidden_size, 1)
         
     def init_hidden(self):
         return torch.randn(self.n_layers, self.batch_size, self.hidden_size).to(self.device)
+<<<<<<< Updated upstream
         # return torch.randn(self.batch_size, self.hidden_size).to(self.device)
+=======
+        
+>>>>>>> Stashed changes
     
     def forward(self, inputs):
         # Avoid breaking if the last batch has a different size
         batch_size = inputs.size(0)
+<<<<<<< Updated upstream
         # print(self.batch_size)
         if batch_size != self.batch_size:
             self.batch_size = batch_size
@@ -49,11 +58,18 @@ class RNN(nn.Module):
         # https://discuss.pytorch.org/t/runtimeerror-expected-scalar-type-long-but-found-float/103299
         # inputs = inputs.type(torch.float)
         
+=======
+        
+        if batch_size != self.batch_size:
+            self.batch_size = batch_size
+        
+>>>>>>> Stashed changes
         encoded = self.encoder(inputs)
         output, hidden = self.rnn(encoded, self.init_hidden())
         
         output = self.decoder(output[:, -1, :]).squeeze()
         output = torch.sigmoid(output)
+<<<<<<< Updated upstream
         # print()
         # print(output)
         # quit()
@@ -63,3 +79,7 @@ class RNN(nn.Module):
         # output = output[:,-0]
 
         return output
+=======
+
+        return output
+>>>>>>> Stashed changes

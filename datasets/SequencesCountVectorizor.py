@@ -28,7 +28,7 @@ class SequencesCountVectorizer(Dataset):
         if retention_ratio < 1 and is_train:
           df = (df).drop((df).query('target < 1').sample(frac=(1-retention_ratio)).index)
 
-        train, test = train_test_split(df, test_size=args.split_percent/100)
+        train, test = train_test_split(df, test_size=args.split_percent/100, random_state=69420)
         df = train if is_train else test
         # create a vectorizer object
         # only keep words with >15% frequency this is a hyper-param
