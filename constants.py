@@ -4,6 +4,9 @@ Add hyperparams here pls
 
 LOCAL = True
 
+# possible models: ['BOW', 'RNN', 'BERT']
+MODEL = 'BERT'
+
 # How many times should the model pass through the training set?
 EPOCHS = 2
 # EPOCHS = 100

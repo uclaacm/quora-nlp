@@ -33,14 +33,18 @@ def train(model, train_loader, optimizer, loss_criterion, device):
         accs = []
         total = 0
 
-        for inputs, target in progress_bar:
-            inputs = inputs.to(device)
-            target = target.to(device)
-
+        for d in progress_bar:
+            inputs = d['inputs'].to(device)
+            target = d['target'].to(device)
+              
             optimizer.zero_grad()
             model.zero_grad()
 
-            output = model(inputs)
+            if MODEL == 'BERT':
+              attention_mask = d['attention_mask'].to(device)
+              output = model(inputs, attention_mask)
+            else:
+              output = model(inputs)
 
             loss = loss_criterion(output.squeeze(), target)
             acc = binary_accuracy(output.squeeze(), target)

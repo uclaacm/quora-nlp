@@ -74,7 +74,7 @@ class TokenDataset(Dataset):
 
     def __getitem__(self, i):
         assert len(self.sequences[i]) == self.max_seq_len
-        return self.sequences[i], self.labels[i]
+        return { 'inputs': self.sequences[i], 'target': self.labels[i] }
     
     def __len__(self):
         return len(self.sequences)

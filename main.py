@@ -17,16 +17,15 @@ import pandas as pd
 from torch import nn, optim
 from torch.utils.data import DataLoader
 
-# TODO: Change these inports to only import models/dataset as specified by args 
-
-from datasets.StartingDataset import StartingDataset 
 from datasets.TokenDataset import TokenDataset
-from datasets.BERTDataset import BERTDataset
+# from datasets.BERTDataset import BERTDataset
+from datasets.BERTDataset2 import BERTDataset
 
 # IMPORT NETWORKS
 from networks.StartingNetwork import StartingNetwork
 from networks.RNN import RNN
-from networks.BERTNetwork import BERTNetwork
+# from networks.BERTNetwork import BERTNetwork
+from networks.BERT2 import BERTNetwork
 
 from training.train import train
 from training.test import test_loop
@@ -38,20 +37,28 @@ def main():
 
     # Init dataset
     data_path = "./data/" if LOCAL else "/kaggle/input/quora-insincere-questions-classification/"
-    #train_path = data_path + "train.csv"
-    train_path = r'C:\Users\email\OneDrive\Documents\Python\quora-nlp\data\train.csv'
+    train_path = data_path + "train.csv"
+    # train_path = r'C:\Users\email\OneDrive\Documents\Python\quora-nlp\data\train.csv'
     test_path = data_path + "test.csv" #this shit isn't labelled
 
-    train_dataset = BERTDataset(train_path, args)
-    test_dataset = BERTDataset(train_path, args, is_train=False)
 
     # enables GPU support
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # choose your model, loss function and optimizer
-    # model = StartingNetwork(hidden1=128, hidden2=64)
-    # model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
-    model = BERTNetwork()
+    if MODEL == 'BERT':
+        train_dataset = BERTDataset(train_path, args)
+        test_dataset = BERTDataset(train_path, args, is_train=False)
+        model = BERTNetwork()
+    elif MODEL == 'RNN':
+        train_dataset = TokenDataset(train_path, args)
+        test_dataset = TokenDataset(train_path, args, is_train=False)
+        model = RNN(vocab_size = max(train_dataset.token2idx['<PAD>'] + 1, test_dataset.token2idx['<PAD>'] + 1), batch_size = BATCH_SIZE, embedding_dimension = MAX_SEQ_LEN, device = device)
+    elif MODEL == 'BOW':
+        train_dataset = TokenDataset(train_path, args)
+        test_dataset = TokenDataset(train_path, args, is_train=False)
+        model = StartingNetwork(hidden1=128, hidden2=64)
+    
     loss_criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
